@@ -35,9 +35,8 @@ pub fn list_of_things<T: FromStr>(filename: impl AsRef<Path>) -> io::Result<Vec<
 }
 
 pub fn vec_to_string<T: ToString>(input_arr: Vec<T>) -> String {
-	input_arr
-	.into_iter()
-	.map(|x| x.to_string())
-	.collect::<Vec<String>>()
-	.join(" ")
+	input_arr.into_iter()
+			 .map(|x| x.to_string())
+			 .collect::<Vec<String>>()
+			 .join(" ")
 }

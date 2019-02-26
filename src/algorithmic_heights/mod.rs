@@ -14,33 +14,33 @@ pub fn fibo(n: u32) -> u32 {
 	return i;
 }
 
-fn binary_search<T: Ord + Copy>(sorted_arr: &[T], n: T) -> i32 {
+fn binary_search<T: Ord + Copy>(sorted_arr: &[T], n: T) -> Option<usize> {
 	let mut i = 0;
-	let mut j = sorted_arr.len()- 1;
+	let mut j = sorted_arr.len() - 1;
 	let mut m = 0;
 
 	// check if it's inside the array
 	if n < sorted_arr[i] || n > sorted_arr[j] {
-		return -1;
+		return None;
 	}
 
 	// check the left and right bounds
 	if n == sorted_arr[i] {
-		return i as i32;
+		return Some(i);
 	} else if n == sorted_arr[j] {
-		return j as i32;
+		return Some(j);
 	}
 
 	loop {
 		let tmp = (i + j) / 2;
 		if tmp == m {
-			return -1; // not found
+			return None;
 		}
 		m = tmp;
 
 		let val = sorted_arr[m];
 		if val == n {
-			return m as i32;
+			return Some(m);
 		} else if val > n {
 			j = m;
 		} else if val < n {
@@ -49,12 +49,20 @@ fn binary_search<T: Ord + Copy>(sorted_arr: &[T], n: T) -> i32 {
 	}
 }
 
-pub fn bins<T: Ord + Copy>(sorted_arr: &[T], n: T) -> i32 {
+pub fn bins<T: Ord + Copy>(sorted_arr: &[T], nums: &[T]) -> Vec<i32> {
+
 	// add one to get 1 based index
-	match binary_search(sorted_arr, n) {
-		-1 => -1,	// preserve -1
-		x  => x + 1,
-	}
+	let add_one = |index| -> i32 {
+		match index {
+			None => -1, // preserve -1
+			Some(x) => (x as i32) + 1,
+		}
+	};
+
+	let result = nums.into_iter()
+					 .map(|n| add_one(binary_search(sorted_arr, *n)))
+					 .collect();
+	return result;
 }
 
 fn create_graph<T: Eq + Hash + Ord + Copy>(edge_list: &[Vec<T>]) -> HashMap<T, HashSet<T>> {
