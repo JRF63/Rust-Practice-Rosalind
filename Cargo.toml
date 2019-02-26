@@ -1,6 +1,6 @@
 [package]
 name = "rosalind"
 version = "0.1.0"
-authors = ["rafael6676"]
+authors = ["Joseph Rafael Ferrer"]
 
 [dependencies]

@@ -4,15 +4,8 @@ use rosalind::{algorithmic_heights, utility::parser};
 fn parse_input() -> (Vec<i32>, Vec<i32>) {
 	let filename = format!("input_dataset/{}", &parser::cmdline_arguments()[1]);
 	let mut input_vec = parser::list_of_things(filename).unwrap();
-	let nums = match input_vec.pop() {
-		Some(x) => x,
-		None => panic!("failed at parsing"),
-	};
-
-	let sorted_arr = match input_vec.pop() {
-		Some(x) => x,
-		None => panic!("failed at parsing"),
-	};
+	let nums = input_vec.pop().unwrap();
+	let sorted_arr = input_vec.pop().unwrap();
 	return (sorted_arr, nums);
 }
 

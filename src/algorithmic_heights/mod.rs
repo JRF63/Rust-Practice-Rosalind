@@ -1,4 +1,4 @@
-use std::cmp::{Eq, Ord};
+use std::cmp::{Eq, Ord, PartialOrd};
 use std::hash::Hash;
 use std::marker::Copy;
 use std::collections::{HashMap, HashSet};
@@ -57,9 +57,9 @@ pub fn bins<T: Ord + Copy>(sorted_arr: &[T], n: T) -> i32 {
 	}
 }
 
-pub fn deg<T: Eq + Hash + Ord + Copy>(input_arr: &[Vec<T>]) -> Vec<usize> {
-	let mut graph: HashMap<T, HashSet<T>> = HashMap::with_capacity(input_arr.len());
-	for edge in input_arr {
+fn create_graph<T: Eq + Hash + Ord + Copy>(edge_list: &[Vec<T>]) -> HashMap<T, HashSet<T>> {
+	let mut graph: HashMap<T, HashSet<T>> = HashMap::with_capacity(edge_list.len());
+	for edge in edge_list {
 		let a = edge[0];
 		let b = edge[1];
 
@@ -84,15 +84,54 @@ pub fn deg<T: Eq + Hash + Ord + Copy>(input_arr: &[Vec<T>]) -> Vec<usize> {
 		}
 	}
 
-	let mut sorted_idx = vec![];
-	for (key, _) in &graph {
-		sorted_idx.push(*key);
-	}
-	sorted_idx.sort();
+	return graph;
+}
 
-	let result = sorted_idx
-					.into_iter()
-					.map(|k| graph[&k].len())
-					.collect();
+pub fn deg(input_arr: &[Vec<u32>]) -> Vec<usize> {
+	let num_nodes = input_arr[0][0];
+	let graph = create_graph(&input_arr[1..]);
+	let mut result = vec![];
+	for key in 1..(num_nodes + 1) {
+		match graph.get(&key) {
+			Some(set) => result.push(set.len()),
+			None => result.push(0),
+		}
+	}
+	return result;
+}
+
+pub fn ddeg(input_arr: &[Vec<u32>]) -> Vec<usize> {
+	let num_nodes = input_arr[0][0];
+	let graph = create_graph(&input_arr[1..]);
+	let mut result = vec![];
+	for key in 1..(num_nodes + 1) {
+		match graph.get(&key) {
+			Some(neighborhood) => {
+						let mut deg = 0;
+						for neighbor in neighborhood {
+							if let Some(set) = graph.get(&neighbor) {
+								deg += set.len();
+							}
+						}
+						result.push(deg);
+					},
+			None => result.push(0),
+		}
+	}
+	return result;
+}
+
+pub fn ins<T: PartialOrd + Copy>(array: &mut [T]) -> usize {
+	let mut result = 0;
+	for i in 1..array.len() {
+		let mut k = i;
+		while k > 0 && array[k] < array[k - 1] {
+			result += 1;
+			let tmp = array[k];
+			array[k] = array[k - 1];
+			array[k - 1] = tmp;
+			k -= 1;
+		}
+	}
 	return result;
 }
