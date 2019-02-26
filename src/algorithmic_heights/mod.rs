@@ -167,3 +167,28 @@ pub fn maj<T: Eq + Hash + Copy>(input_arr: &[Vec<T>], default: T) -> Vec<T> {
 	}
 	return result;
 }
+
+pub fn mer<T: Copy + Ord>(array_a: &[T], array_b: &[T]) -> Vec<T> {
+	let mut i = 0;
+	let mut j = 0;
+
+	let total_len = array_a.len() + array_b.len();
+	let mut result = Vec::with_capacity(total_len);
+
+	while result.len() < total_len {
+		if j >= array_b.len() || array_a[i] < array_b[j] {
+			result.push(array_a[i]);
+			i += 1;
+		} else if i >= array_a.len() || array_a[i] > array_b[j] {
+			result.push(array_b[j]);
+			j += 1;
+		} else {
+			result.push(array_a[i]);
+			result.push(array_b[j]);
+			i += 1;
+			j += 1;
+		}
+	}
+
+	return result;
+}
