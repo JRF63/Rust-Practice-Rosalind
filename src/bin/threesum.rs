@@ -9,7 +9,7 @@ fn parse_input() -> Vec<Vec<i32>> {
 
 fn main() {
 	let input_vec = parse_input();
-	let ans = algorithmic_heights::threesum::threesum(&input_vec[1..]);
+	let ans = algorithmic_heights::sum::threesum(&input_vec[1..]);
 	for line in ans {
 		match line {
 			None => println!("{}", -1),

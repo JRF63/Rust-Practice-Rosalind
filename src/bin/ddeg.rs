@@ -8,7 +8,7 @@ fn parse_input() -> Vec<Vec<u32>> {
 
 fn main() {
 	let input_arr = parse_input();
-	let ans = algorithmic_heights::ddeg(&input_arr);
+	let ans = algorithmic_heights::graph::ddeg(&input_arr);
 	let res = parser::vec_to_string(ans);
 	println!("{}", res);
 }

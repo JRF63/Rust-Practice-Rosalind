@@ -12,7 +12,7 @@ fn parse_input() -> (Vec<i32>, Vec<i32>) {
 
 fn main() {
 	let (array_a, array_b) = parse_input();
-	let ans = algorithmic_heights::mer(&array_a[..], &array_b[..]);
+	let ans = algorithmic_heights::sorting::mer(&array_a[..], &array_b[..]);
 	let res = parser::vec_to_string(ans);
 	println!("{}", res);
 }

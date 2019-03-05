@@ -11,7 +11,7 @@ fn parse_input() -> Vec<i32> {
 fn main() {
 	let mut nums = parse_input();
 
-	algorithmic_heights::ms(&mut nums);
+	algorithmic_heights::sorting::ms(&mut nums);
 	let res = parser::vec_to_string(nums);
 	println!("{}", res);
 }

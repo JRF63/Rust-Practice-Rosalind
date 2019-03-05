@@ -8,6 +8,6 @@ fn parse_input() -> Vec<i32> {
 
 fn main() {
 	let mut input_arr = parse_input();
-	let res = algorithmic_heights::ins(&mut input_arr);
+	let res = algorithmic_heights::sorting::ins(&mut input_arr);
 	println!("{}", res);
 }

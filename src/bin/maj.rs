@@ -8,7 +8,7 @@ fn parse_input() -> Vec<Vec<i32>> {
 
 fn main() {
 	let input_arr = parse_input();
-	let ans = algorithmic_heights::maj(&input_arr[1..], -1);
+	let ans = algorithmic_heights::maj::maj(&input_arr[1..], -1);
 	let res = parser::vec_to_string(ans);
 	println!("{}", res);
 }
