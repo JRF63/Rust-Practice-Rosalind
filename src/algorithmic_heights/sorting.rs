@@ -80,7 +80,24 @@ pub fn ms<T: Copy + Ord>(array: &mut [T]) -> usize {
 	return count;
 }
 
-pub fn inv<T: Copy + Ord>(input: &[T]) -> usize {
-	let mut array = input.to_vec();
-	return ms(&mut array);
+pub fn inv<T: Copy + Ord>(array: &[T]) -> usize {
+	let mut array_copy = array.to_vec();
+	return ms(&mut array_copy);
+}
+
+pub fn par<T: Copy + Ord>(array: &mut [T]) -> usize {
+	
+	let pivot = array[0];
+	let mut i = 0;
+
+	for j in 1..array.len() {
+		if array[j] < pivot {
+			i += 1;
+			array.swap(i, j);
+		}
+	}
+
+	array.swap(i, 0);
+
+	return i;
 }
