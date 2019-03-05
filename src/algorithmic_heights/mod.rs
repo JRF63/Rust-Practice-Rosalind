@@ -1,6 +1,4 @@
-use std::cmp::{Eq, Ord, PartialOrd};
 use std::hash::Hash;
-use std::marker::Copy;
 use std::collections::{HashMap, HashSet};
 
 pub fn fibo(n: u32) -> u32 {
@@ -176,27 +174,73 @@ pub fn maj<T: Eq + Hash + Copy>(input_arr: &[Vec<T>], default: T) -> Vec<T> {
 	return result;
 }
 
-pub fn mer<T: Copy + Ord>(array_a: &[T], array_b: &[T]) -> Vec<T> {
+
+fn merge_to_tmp<T: Copy + Ord>(array_a: &[T], array_b: &[T], tmp: &mut [T]) {
 	let mut i = 0;
 	let mut j = 0;
+	let mut k = 0;
 
 	let total_len = array_a.len() + array_b.len();
-	let mut result = Vec::with_capacity(total_len);
 
-	while result.len() < total_len {
-		if j >= array_b.len() || array_a[i] < array_b[j] {
-			result.push(array_a[i]);
+	while k < total_len {
+		if j >= array_b.len() {
+			tmp[k] = array_a[i];
 			i += 1;
-		} else if i >= array_a.len() || array_a[i] > array_b[j] {
-			result.push(array_b[j]);
+		} else if i >= array_a.len() {
+			tmp[k] = array_b[j];
+			j += 1;
+		} else if array_a[i] < array_b[j] {
+			tmp[k] = array_a[i];
+			i += 1;
+		} else if array_a[i] > array_b[j] {
+			tmp[k] = array_b[j];
 			j += 1;
 		} else {
-			result.push(array_a[i]);
-			result.push(array_b[j]);
+			tmp[k] = array_a[i];
 			i += 1;
+			k += 1;
+			tmp[k] = array_b[j];
 			j += 1;
 		}
+		k += 1;
 	}
+}
 
+pub fn mer<T: Copy + Ord>(array_a: &[T], array_b: &[T]) -> Vec<T> {
+	let mut result = vec![array_a[0]; array_a.len() + array_b.len()];
+	merge_to_tmp(array_a, array_b, &mut result);
 	return result;
+}
+
+pub fn ms<T: Copy + Ord>(array: &mut [T]) {
+	let mut tmp: Vec<T> = array.to_vec();
+
+	let mut sort_size = 1;
+
+	let mut n = array.len();
+	while n > 0 {
+		n = n / 2;
+
+		let next_size = sort_size * 2;
+
+		let quot = array.len() / next_size;
+
+		let mut i = 0;
+
+		for _ in 0..quot {
+			let j = i + sort_size;
+			let k = j + sort_size;
+			merge_to_tmp(&array[i..j], &array[j..k], &mut tmp[i..k]);
+			i += next_size;
+		}
+
+		if i + sort_size < array.len() {
+			let j = i + sort_size;
+			let k = array.len();
+			merge_to_tmp(&array[i..j], &array[j..k], &mut tmp[i..k]);
+		}
+
+		sort_size = next_size;
+		array.copy_from_slice(&tmp);
+	}
 }
