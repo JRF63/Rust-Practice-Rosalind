@@ -8,6 +8,6 @@ fn parse_input() -> u32 {
 
 fn main() {
 	let n = parse_input();
-	let result = algorithmic_heights::fibo(n);
+	let result = algorithmic_heights::fibo::fibo(n);
 	println!("{}", result);
 }

@@ -12,7 +12,7 @@ fn parse_input() -> (Vec<i32>, Vec<i32>) {
 fn main() {
 	let (sorted_arr, nums) = parse_input();
 
-	let ans = algorithmic_heights::bins(&sorted_arr, &nums);
+	let ans = algorithmic_heights::bins::bins(&sorted_arr, &nums);
 	let res = parser::vec_to_string(ans);
 	println!("{}", res);
 }
