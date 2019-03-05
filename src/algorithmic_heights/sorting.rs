@@ -86,10 +86,10 @@ pub fn inv<T: Copy + Ord>(array: &[T]) -> usize {
 }
 
 pub fn par<T: Copy + Ord>(array: &mut [T]) -> usize {
-	
+	// pivot needs to be the first element
 	let pivot = array[0];
-	let mut i = 0;
 
+	let mut i = 0;
 	for j in 1..array.len() {
 		if array[j] < pivot {
 			i += 1;
@@ -100,4 +100,36 @@ pub fn par<T: Copy + Ord>(array: &mut [T]) -> usize {
 	array.swap(i, 0);
 
 	return i;
+}
+
+pub fn par3<T: Copy + Ord>(array: &mut [T]) -> usize {
+	// pivot needs to be the first element
+	let n = array.len() - 1;
+	let pivot = array[0];
+	array.swap(0, n);
+
+	let mut i = 0;
+	let mut k = 0;
+	let mut p = n;
+
+	while i < p {
+		if array[i] < pivot {
+			array.swap(i, k);
+			i += 1;
+			k += 1;
+		} else if array[i] == array[n] {
+			p -= 1;
+			array.swap(i, p);
+		} else {
+			i += 1;
+		}
+	}
+
+	let m = std::cmp::min(p - k, n - p + 1);
+
+	for (a, b) in (k..k + m).zip(n - m + 1..n + 1) {
+		array.swap(a, b);
+	}
+
+	return m;
 }
