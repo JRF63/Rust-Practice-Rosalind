@@ -1,3 +1,5 @@
+use rand::Rng;
+
 pub fn ins<T: PartialOrd + Copy>(array: &mut [T]) -> usize {
 	let mut result = 0;
 	for i in 1..array.len() {
@@ -131,5 +133,57 @@ pub fn par3<T: Copy + Ord>(array: &mut [T]) -> usize {
 		array.swap(a, b);
 	}
 
-	return m;
+	return k;
+}
+
+pub fn med<T: Copy + Ord>(array: &mut [T], idx: usize) -> T {
+	
+	let pos = idx - 1;
+	let mut a = 0;
+	let mut z = array.len();
+
+	let mut rng = rand::thread_rng();
+
+	loop {
+		let slice = &mut array[a..z];
+
+		let pivot_idx = rng.gen_range(0, slice.len());
+
+		let n = slice.len() - 1;
+		let pivot = slice[pivot_idx];
+		slice.swap(pivot_idx, n);
+
+		let mut i = 0;
+		let mut k = 0;
+		let mut p = n;
+
+		while i < p {
+			if slice[i] < pivot {
+				slice.swap(i, k);
+				i += 1;
+				k += 1;
+			} else if slice[i] == pivot {
+				p -= 1;
+				slice.swap(i, p);
+			} else {
+				i += 1;
+			}
+		}
+
+		let m = std::cmp::min(p - k, n - p + 1);
+
+		for (a, b) in (k..k + m).zip(n - m + 1..n + 1) {
+			slice.swap(a, b);
+		}
+
+		if pos > a + (n - p + k) {
+			a += k + m;
+			z = a + slice.len() - (k + m);
+		} else if pos < a + k {
+			z = a + k;
+		} else {
+			return slice[k];
+		}
+	}
+
 }

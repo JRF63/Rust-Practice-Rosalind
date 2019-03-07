@@ -84,3 +84,41 @@ pub fn bfs(graph: &HashMap<usize, HashSet<usize>>, num_nodes: usize) -> Vec<i32>
 
 	return result;
 }
+
+pub fn cc(graph: &HashMap<usize, HashSet<usize>>, num_nodes: usize) -> usize {
+	let mut nodes: HashSet<_> = (1..(num_nodes + 1)).into_iter().collect();
+	let mut res = 0;
+
+	let mut queue = vec![];
+	let mut visited = HashSet::new();
+
+	while !nodes.is_empty() {
+		
+
+		for node in &nodes {
+			visited.insert(*node);
+			queue.push(*node);
+			break;
+		}
+
+		while !queue.is_empty() {
+			let node = queue.pop().unwrap();
+			if let Some(set) = graph.get(&node) {
+				for next in set {
+					if !visited.contains(next) {
+						visited.insert(*next);
+						queue.push(*next);
+					}
+				}
+			}
+		}
+
+		for node in &visited {
+			nodes.remove(node);
+		}
+
+		visited.clear();
+		res += 1;
+	}
+	return res;
+}
